@@ -1,0 +1,106 @@
+<taeDescription xmlns="http://uima.apache.net.akazakov.resourceSpecifier">
+    <frameworkImplementation>net.akazakov.apache.uima.cpp</frameworkImplementation>
+    <primitive>true</primitive>
+    <annotatorImplementationName>ConllReader</annotatorImplementationName>
+    <analysisEngineMetaData>
+
+        <name>ConllReader</name>
+        <description>Parses CONLL-U file format</description>
+        <version>1.0</version>
+        <vendor>Part</vendor>
+
+        <configurationParameters>
+            <configurationParameter>
+                <name>FileName</name>
+                <description>File name with CONLL-U data</description>
+                <type>String</type>
+                <multiValued>false</multiValued>
+                <mandatory>true</mandatory>
+            </configurationParameter>
+        </configurationParameters>
+
+        <typeSystemDescription>
+            <types>
+                <typeDescription>
+                    <name>net.akazakov.KeyValue</name>
+                    <description></description>
+                    <supertypeName>uima.cas.TOP</supertypeName>
+                    <features>
+                        <featureDescription>
+                            <name>Key</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.String</rangeTypeName>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>Value</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.String</rangeTypeName>
+                        </featureDescription>
+                    </features>
+                </typeDescription>
+                <typeDescription>
+                    <name>net.akazakov.ConllAnnotation</name>
+                    <description></description>
+                    <supertypeName>uima.tcas.Annotation</supertypeName>
+                    <features>
+                        <featureDescription>
+                            <name>TopLevel</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>Form</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.String</rangeTypeName>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>Lemma</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.String</rangeTypeName>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>UPosTag</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.String</rangeTypeName>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>XPosTag</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.String</rangeTypeName>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>Feats</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.FSArray</rangeTypeName>
+                            <elementType>net.akazakov.KeyValue</elementType>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>Misc</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.FSArray</rangeTypeName>
+                            <elementType>net.akazakov.KeyValue</elementType>
+                        </featureDescription>
+                        <featureDescription>
+                            <name>Children</name>
+                            <description></description>
+                            <rangeTypeName>uima.cas.FSArray</rangeTypeName>
+                            <elementType>net.akazakov.ConllAnnotation</elementType>
+                        </featureDescription>
+                    </features>
+                </typeDescription>
+            </types>
+        </typeSystemDescription>
+
+        <capabilities>
+            <capability>
+                <inputs>
+                </inputs>
+                <outputs>
+                        <type>net.akazakov.ConllAnnotation</type>
+                </outputs>
+            </capability>
+        </capabilities>
+
+
+    </analysisEngineMetaData>
+</taeDescription>

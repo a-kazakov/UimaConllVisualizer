@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualiser</title>
+    <script>
+        //
+    </script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Tahoma;
+            line-height: 1.5;
+        }
+
+        body {
+            overflow-y: scroll;
+            padding: 10px;
+        }
+
+        .a {
+            cursor: pointer;
+        }
+
+        .a-VERB {
+            background-color: #bbf;
+        }
+
+        .a-NOUN {
+            background-color: #fbb;
+        }
+
+        .a-ADJ {
+            background-color: #bfb;
+        }
+
+        .a-ADV {
+            background-color: #ffb;
+        }
+
+        .a-INTJ {
+            background-color: #fbf;
+        }
+
+        .a-PROPN {
+            background-color: #bff;
+        }
+
+        .a-_ {
+            background-color: #fdb;
+        }
+
+        .a-ADP {
+            background-color: #bdf;
+        }
+
+        .a-AUX {
+            background-color: #bfd;
+        }
+
+        .a-CONJ {
+            background-color: #dbf;
+        }
+
+        .a-DET {
+            background-color: #dfb;
+        }
+
+        .a-NUM {
+            background-color: #fbd;
+        }
+
+        .a-PART {
+            background-color: #abf;
+        }
+
+        .a-PRON {
+            background-color: #afb;
+        }
+
+        .a-SCONJ {
+            background-color: #baf;
+        }
+
+        .a-PUNCT {
+            background-color: #bfa;
+        }
+
+        .a-SYM {
+            background-color: #fab;
+        }
+
+        .a-X {
+            background-color: #fba;
+        }
+
+        .a.disabled {
+            background-color: transparent !important;
+            cursor: default;
+        }
+
+        .a:not(:hover) .card, .a.disabled .card {
+            display: none;
+        }
+
+        .a {
+            position: relative;
+        }
+
+        .a .card {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            width: 280px;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 12px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .a .subcard {
+            padding: 5px;
+            margin: 5px 0 10px;
+            border: 1px dotted #666;
+            border-radius: 3px;
+            width: auto;
+            position: static;
+            background-color: #ddd;
+        }
+
+        .card table {
+            width: 100%;
+        }
+
+        .card th, .card td {
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .card th.title {
+            text-align: center;
+            font-style: italic;
+        }
+
+        .card td {
+            padding-left: 10px;
+        }
+
+        .card th {
+            width: 60%;
+        }
+
+        .controls {
+            float: right;
+            width: 100px;
+            border: 2px solid black;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        #dst {
+            margin-bottom: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="dst">
+#content
+    </div>
+</body>
+</html>
