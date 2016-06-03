@@ -19,14 +19,6 @@
                 <mandatory>true</mandatory>
             </configurationParameter>
         </configurationParameters>
-        <configurationParameterSettings>
-          <nameValuePair>
-            <name>FileName</name>
-            <value>
-              <string>output.html</string>
-            </value>
-          </nameValuePair>
-        </configurationParameterSettings>
 
         <typeSystemDescription>
             <types>

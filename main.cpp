@@ -3,11 +3,20 @@
 #include <iostream>
 #include <memory>
 
+#include "SimpleEngineConfig.h"
+
+
 std::string prompt(const std::string &message) {
     std::string result;
     std::cout << message << " ";
     std::getline(std::cin, result);
     return result;
+}
+
+std::string getArgument(int argc, char *argv[], int arg_pos, const std::string &prompt_message) {
+    return argc > arg_pos
+        ? argv[arg_pos]
+        : prompt(prompt_message);
 }
 
 int main(int argc, char *argv[]) {
@@ -19,27 +28,24 @@ int main(int argc, char *argv[]) {
     uima::TyErrorId utErrorId; // Variable to store return codes
     uima::ErrorInfo errorInfo;
 
-    std::string filename = argc > 1
-        ? argv[1]
-        : prompt("Enter filename:");
+    std::string input_filename = getArgument(argc, argv, 1, "Enter input file name:");
+    std::string output_filename = getArgument(argc, argv, 2, "Enter output file name:");
 
-    uima::NameValuePair fn_pair;
-    uima::AnalysisEngineDescription engineDescription;
-    uima::TextAnalysisEngineSpecifierBuilder builder;
-    fn_pair.define(uima::ConfigurationParameter::STRING, uima::ConfigurationParameter::SINGLE_VALUE);
-    fn_pair.setName(icu::UnicodeString::fromUTF8("FileName"));
-    fn_pair.setValue(icu::UnicodeString::fromUTF8(filename));
-    builder.buildTaeFromFile(engineDescription, READER_DESCRIPTOR_XML);
-    engineDescription.setNameValuePair(fn_pair);
+    SimpleEngineConfig readEngineConfig(READER_DESCRIPTOR_XML);
+    readEngineConfig.addStringParameter("FileName", input_filename.c_str());
 
-    uima::AnalysisEngine *pEngine = uima::Framework::createAnalysisEngine(engineDescription, errorInfo);
-    uima::AnalysisEngine *sEngine = uima::Framework::createAnalysisEngine("Visualizer.xml", errorInfo);
+    SimpleEngineConfig visEngineConfig(VISUALIZER_DESCRIPTOR_XML);
+    visEngineConfig.addStringParameter("FileName", output_filename.c_str());
 
-    std::cerr << errorInfo.asString() << std::endl;
+    uima::AnalysisEngine *readEngine = uima::Framework::createAnalysisEngine(readEngineConfig.getConfig(), errorInfo);
+    uima::AnalysisEngine *visEngine = uima::Framework::createAnalysisEngine(visEngineConfig.getConfig(), errorInfo);
 
-    uima::CAS *cas = pEngine->newCAS();
-    pEngine->process(*cas);
-    sEngine->process(*cas);
+    uima::CAS *cas = readEngine->newCAS();
+
+    readEngine->process(*cas);
+    visEngine->process(*cas);
+
+    std::cerr << "Successfully saved result to " << output_filename << std::endl;
 
     return 0;
 }
