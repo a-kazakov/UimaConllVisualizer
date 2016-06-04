@@ -92,7 +92,6 @@ void ConllReader::fetchLine(ConllAnnotation &dest) {
     readStringMap(dest.misc, chunks[9]);
 }
 
-
 icu::UnicodeString ConllReader::restoreDocumentText(std::vector<std::vector<ConllAnnotation>> &sentences) {
     icu::UnicodeString result;
     icu::UnicodeString SPACE = icu::UnicodeString::fromUTF8(" ");

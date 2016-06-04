@@ -136,6 +136,4 @@ public:
 };
 
 using uima::Annotator;
-
 MAKE_AE(ConllReader);
-

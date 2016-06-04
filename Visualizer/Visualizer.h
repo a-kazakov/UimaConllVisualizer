@@ -4,9 +4,11 @@
 
 class Visualizer : public uima::Annotator {
 private:
-    uima::AnnotatorContext *context;
+    // Logic variables
 
     std::string _filename;
+
+    // UIMA type system support
 
     uima::Type _t_conll;
     uima::Type _t_keyvalue;
@@ -15,9 +17,15 @@ private:
     uima::Feature _f_upostag;
     uima::Feature _f_xpostag;
     uima::Feature _f_feats;
+    uima::Feature _f_misc;
     uima::Feature _f_children;
     uima::Feature _f_key;
     uima::Feature _f_value;
+
+    // Processors
+
+    icu::UnicodeString makeCardContent(
+        const uima::FeatureStructure &fs);
 
     icu::UnicodeString makeStringCardRow(
         const icu::UnicodeString &caption,
@@ -29,17 +37,16 @@ private:
         const uima::FeatureStructure &fs,
         const uima::Feature &feature);
 
-    icu::UnicodeString makeCardContent(
-        const uima::FeatureStructure &fs);
-
     icu::UnicodeString makeTag(
         const uima::AnnotationFS &fs);
+
+    icu::UnicodeString makeControlsSet(
+        const std::set<std::string> &values);
 
     icu::UnicodeString makeControl(
         const std::string &value);
 
-    icu::UnicodeString makeControlsSet(
-        const std::set<std::string> &values);
+    // Helpers
 
     void saveResult(
         const icu::UnicodeString &content,
@@ -54,12 +61,18 @@ public:
     uima::TyErrorId destroy() override {
         return (uima::TyErrorId)UIMA_ERR_NONE;
     }
-    uima::TyErrorId initialize(uima::AnnotatorContext &rclAnnotatorContext) override;
-    uima::TyErrorId typeSystemInit(uima::TypeSystem const & crTypeSystem) override;
-    uima::TyErrorId process(uima::CAS & rCas, uima::ResultSpecification const & crResultSpecification) override;
+
+    uima::TyErrorId initialize(
+        uima::AnnotatorContext &rclAnnotatorContext) override;
+
+    uima::TyErrorId typeSystemInit(
+        uima::TypeSystem const &crTypeSystem) override;
+
+    uima::TyErrorId process(
+        uima::CAS & cas,
+        uima::ResultSpecification const &crResultSpecification) override;
 
 };
 
 using uima::Annotator;
 MAKE_AE(Visualizer);
-
