@@ -11,10 +11,13 @@
 class ConllReader : public uima::Annotator {
 private:
     // Logic variables
+
     bool _eof;
     std::string _filename;
     std::ifstream _stream;
+
     // UIMA type system support
+
     uima::Type _t_conll;
     uima::Type _t_keyvalue;
     uima::Feature _f_form;
