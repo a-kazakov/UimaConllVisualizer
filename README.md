@@ -1,0 +1,46 @@
+# UIMA-CPP CONLL-U format visualizer
+
+## Foreword
+
+This project is made for [Mathematical Methods of Text Analysis](https://github.com/mathtexts/) course.
+
+It assumed to be runned on the following VM (https://yadi.sk/d/Xq-3KjParTntG), however it can be easily adopted to run on any other system. Examine CMakeLists for further information.
+
+## Description
+
+This tool visualizes CONLL-U anotations with support of UIMA-CPP framework. 
+It takes CONLL-U file as an input and outputs HTML including source document text with all annotations' info.
+
+The project includes two UIMA annotators which can also be used separately:
+* **CONLL-U format reader** — this annotator reads CONLL-U file to UIMA annotations. Annotations format is specified in ConllReader.xml file.
+* **Visualizer** — this annotator takes annotations produced by CONLL-U format reader and produces HTML file with annotations.
+
+## Installation
+
+This guide is written to be used on the following VM: https://yadi.sk/d/Xq-3KjParTntG
+
+Since UIMACPP headers doesn't compile with -std=c++11 option, some changes has to be made on them. Type this command into terminal to resolve the issue:
+
+`sudo sed -i -e 's/\.operator void...//g' /usr/local/uimacpp/include/uima/strtools.hpp`
+
+Then cd to `/home/student/projects` folder, clone and build the project:
+
+1. `git clone https://github.com/a-kazakov/UimaConllVisualizer.git`
+2. `cd UimaConllVisualizer`
+3. `cmake .`
+4. `make`
+
+The project will be compiled to `/home/student/projects/UimaConllVisualizerOut/`.
+
+## Running
+
+For the test run you'll need a web browser, for example, firefox:
+
+`sudo apt-get install firefox`
+
+After that move to the project destination follder (`/home/student/projects/UimaConllVisualizerOut/`).
+`sample.conll` file from the project folder (`/home/student/projects/UimaConllVisualizer`) can be used for test run. To perform test run, type the following into console:
+
+`./ConllVisualizer ../UimaConllVisualizer/examples/sample.conll result.html`
+
+When it is done open result.html with a web-browser: `firefox result.html`.
