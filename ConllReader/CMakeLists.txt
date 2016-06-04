@@ -1,8 +1,8 @@
 
 set(TARGET ConllReader)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "/home/student/projects/ConllVisualizerOut")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "/home/student/projects/ConllVisualizerOut")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "/home/student/projects/UimaConllVisualizerOut")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/student/projects/UimaConllVisualizerOut")
 
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")

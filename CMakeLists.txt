@@ -8,8 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_BUILD_TYPE Debug)
 set(SOURCE_FILES main.cpp SimpleEngineConfig.cpp)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/student/projects/ConllVisualizerOut")
-set(CMAKE_SOURCE_DIR "/home/student/projects/ConllVisualizerOut")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/student/projects/UimaConllVisualizerOut")
 
 add_subdirectory(ConllReader)
 add_subdirectory(Visualizer)
