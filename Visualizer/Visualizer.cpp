@@ -1,5 +1,7 @@
 #include "Visualizer.h"
 
+#include <unordered_map>
+
 icu::UnicodeString Visualizer::dereferenceString(const uima::UnicodeStringRef &ref) {
     return icu::UnicodeString(ref.getBuffer(), ref.length());
 }
@@ -78,13 +80,61 @@ icu::UnicodeString Visualizer::makeTag(const uima::AnnotationFS &fs) {
            PART4;
 }
 
-void Visualizer::saveResult(const icu::UnicodeString &result) {
+icu::UnicodeString Visualizer::makeControl(const std::string &value) {
+    // Definitions
+    static const std::unordered_map<std::string, icu::UnicodeString> ALIASES {
+        std::make_pair<std::string, icu::UnicodeString>("_", "Untyped / multiple types"),
+        std::make_pair<std::string, icu::UnicodeString>("ADJ", "Adjectives"),
+        std::make_pair<std::string, icu::UnicodeString>("ADP", "Adpositions"),
+        std::make_pair<std::string, icu::UnicodeString>("ADV", "Adverbs"),
+        std::make_pair<std::string, icu::UnicodeString>("AUX", "Auxiliary verbs"),
+        std::make_pair<std::string, icu::UnicodeString>("CONJ", "Coordinating conjunctions"),
+        std::make_pair<std::string, icu::UnicodeString>("DET", "Determiners"),
+        std::make_pair<std::string, icu::UnicodeString>("INTJ", "Interjections"),
+        std::make_pair<std::string, icu::UnicodeString>("NOUN", "Nouns"),
+        std::make_pair<std::string, icu::UnicodeString>("NUM", "Numerals"),
+        std::make_pair<std::string, icu::UnicodeString>("PART", "Particles"),
+        std::make_pair<std::string, icu::UnicodeString>("PRON", "Pronouns"),
+        std::make_pair<std::string, icu::UnicodeString>("PROPN", "Proper nouns"),
+        std::make_pair<std::string, icu::UnicodeString>("PUNCT", "Punctuation"),
+        std::make_pair<std::string, icu::UnicodeString>("SCONJ", "Subordinating conjunctions"),
+        std::make_pair<std::string, icu::UnicodeString>("SYM", "Symbols"),
+        std::make_pair<std::string, icu::UnicodeString>("VERB", "Verbs"),
+        std::make_pair<std::string, icu::UnicodeString>("X", "Others")
+    };
+    static const icu::UnicodeString PART1 = "<label><input type=\"checkbox\" checked class=\"control-cb\" data-value=\"";
+    static const icu::UnicodeString PART2 = "\">";
+    static const icu::UnicodeString PART3 = "</label><br>\n";
+    // Implementation
+    icu::UnicodeString label;
+    if (ALIASES.count(value) == 0) {
+        label = icu::UnicodeString::fromUTF8(value);
+    } else {
+        label = ALIASES.at(value);
+    }
+    return PART1 + icu::UnicodeString::fromUTF8(value) + PART2 + label + PART3;
+}
+
+icu::UnicodeString Visualizer::makeControlsSet(const std::set<std::string> &values) {
+    icu::UnicodeString result;
+    for (const auto &value : values) {
+        result += makeControl(value);
+    }
+    return result;
+}
+
+void Visualizer::saveResult(const icu::UnicodeString &content,
+                            const icu::UnicodeString &controls) {
     std::string buf, output;
     std::ofstream out_stream(_filename);
     std::ifstream template_stream("_visualizer_template.html");
     while (std::getline(template_stream, buf)) {
         if (buf == "#content") {
-            out_stream << result.toUTF8String(output);
+            out_stream << content.toUTF8String(output);
+            output.clear();
+        } else if (buf == "#controls") {
+            out_stream << controls.toUTF8String(output);
+            output.clear();
         } else {
             out_stream << buf;
         }
@@ -92,19 +142,25 @@ void Visualizer::saveResult(const icu::UnicodeString &result) {
     }
 }
 
-uima::TyErrorId Visualizer::process(uima::CAS &cas, uima::ResultSpecification const &crResultSpecification) {
+uima::TyErrorId Visualizer::process(uima::CAS &cas,
+                                    uima::ResultSpecification const &crResultSpecification) {
     size_t latest_pos = 0;
-    icu::UnicodeString result;
+    icu::UnicodeString content;
     icu::UnicodeString document_text = dereferenceString(cas.getDocumentText());
+    std::set<std::string> upostags;
     for (auto it = cas.getAnnotationIndex(_t_conll).iterator(); it.isValid(); it.moveToNext()) {
         const auto &fs = it.get();
         if (latest_pos < fs.getBeginPosition()) {
-            result += document_text.tempSubStringBetween(latest_pos, fs.getBeginPosition());
+            content += document_text.tempSubStringBetween(latest_pos, fs.getBeginPosition());
         }
-        result += makeTag(fs);
+        content += makeTag(fs);
         latest_pos = fs.getEndPosition();
+        // Process UPosTag
+        std::string upostag;
+        dereferenceString(fs.getStringValue(_f_upostag)).toUTF8String(upostag);
+        upostags.insert(upostag);
     }
-    saveResult(result);
+    saveResult(content, makeControlsSet(upostags));
     return (uima::TyErrorId)UIMA_ERR_NONE;
 }
 

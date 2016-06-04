@@ -1,6 +1,6 @@
 #include "uima/api.hpp"
 
-using namespace uima;
+#include <set>
 
 class Visualizer : public uima::Annotator {
 private:
@@ -35,11 +35,18 @@ private:
     icu::UnicodeString makeTag(
         const uima::AnnotationFS &fs);
 
-    void saveResult(
-        const icu::UnicodeString &result);
+    icu::UnicodeString makeControl(
+        const std::string &value);
 
-    icu::UnicodeString dereferenceString
-        (const uima::UnicodeStringRef &ref);
+    icu::UnicodeString makeControlsSet(
+        const std::set<std::string> &values);
+
+    void saveResult(
+        const icu::UnicodeString &content,
+        const icu::UnicodeString &controls);
+
+    static icu::UnicodeString dereferenceString(
+        const uima::UnicodeStringRef &ref);
 
 public:
     Visualizer() = default;
@@ -53,5 +60,6 @@ public:
 
 };
 
+using uima::Annotator;
 MAKE_AE(Visualizer);
 

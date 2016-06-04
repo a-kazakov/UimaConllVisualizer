@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Visualiser</title>
+    <title>Visualizer</title>
     <script>
-        //
+        function addClass(element, cls) {
+            var arr = element.getAttribute("class").split(/\s+/);
+            var pos = arr.indexOf(cls);
+            if (pos < 0) {
+                arr.push(cls);
+            }
+            element.setAttribute("class", arr.join(" "));
+        }
+        function removeClass(element, cls) {
+            var arr = element.getAttribute("class").split(/\s+/);
+            var pos = arr.indexOf(cls);
+            if (pos >= 0) {
+                arr.splice(pos, 1);
+            }
+            element.setAttribute("class", arr.join(" "));
+        }
+        function findClasses(class_name) {
+            return [].slice.call(document.getElementsByClassName(class_name));
+        }
+        function onCbChange() {
+            console.log("oncbchange");
+            var class_name = "a-" + this.dataset.value;
+            var elements = findClasses(class_name);
+            if (this.checked) {
+                elements.forEach(function(element) { removeClass(element, "disabled") });
+            } else {
+                elements.forEach(function(element) { addClass(element, "disabled") });
+            }
+        }
+        window.addEventListener("load", function() {
+            findClasses("control-cb").forEach(function(cb) {
+                cb.addEventListener("change", onCbChange);
+                onCbChange.apply(cb);
+            });
+        });
     </script>
     <style>
         html, body {
@@ -155,7 +189,7 @@
 
         .controls {
             float: right;
-            width: 100px;
+            width: 300px;
             border: 2px solid black;
             margin: 10px;
             padding: 10px;
@@ -163,10 +197,14 @@
 
         #dst {
             margin-bottom: 100vh;
+            margin-right: 320px;
         }
     </style>
 </head>
 <body>
+    <div id="controls" class="controls">
+#controls
+    </div>
     <div id="dst">
 #content
     </div>
